@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meli Play — Design System v2</title>
+<style>
+  :root {
+    /* COLORES */
+    --yellow: #FFE600;
+    --blue: #3483FA;
+    --blue-light: #EBF2FF;
+    --blue-border: #CCE0FF;
+    --red: #F23D4F;
+    --green: #00A650;
+    --black: #000000;
+    --white: #FFFFFF;
+    --gray-100: #F5F5F5;
+    --gray-200: #EEEEEE;
+    --gray-300: #E0E0E0;
+    --gray-500: #999999;
+    --gray-700: #555555;
+    --social-m: #7F77DD;
+    --social-r: #1D9E75;
+    --social-l: #BA7517;
+    --warn-bg: #FFF9E6;
+
+    /* TIPOGRAFÍA — escala corregida para mobile */
+    --title-xl: 24px;
+    --title-lg: 20px;
+    --title-md: 17px;
+    --title-sm: 15px;
+    --body-lg: 15px;
+    --body-md: 14px;
+    --body-sm: 13px;
+    --label: 12px;
+    --caption: 12px;
+    --micro: 11px;
+
+    /* ESPACIADO — base 8px */
+    --sp-0: 2px;
+    --sp-1: 4px;
+    --sp-2: 8px;
+    --sp-3: 12px;
+    --sp-4: 16px;
+    --sp-5: 24px;
+    --sp-6: 32px;
+    --sp-7: 48px;
+    --touch: 44px;
+
+    /* RADIOS */
+    --r-sm: 6px;
+    --r-md: 8px;
+    --r-lg: 12px;
+    --r-xl: 20px;
+    --r-pill: 999px;
+
+    --font: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    --shadow-card: 0 1px 4px rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.04);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: #F0F0EE; color: var(--black); }
+
+  /* ── LAYOUT ── */
+  .page { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .ds-header {
+    background: var(--yellow);
+    padding: 28px 32px;
+    border-radius: var(--r-xl);
+    margin-bottom: 48px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .ds-header h1 { font-size: 26px; font-weight: 800; color: #000; }
+  .ds-header p { font-size: 13px; color: #444; margin-top: 4px; }
+  .ds-version { background: rgba(0,0,0,.12); border-radius: var(--r-pill); padding: 4px 12px; font-size: 12px; font-weight: 700; color: #000; }
+
+  .section { margin-bottom: 52px; }
+  .section-title {
+    font-size: 11px; font-weight: 700; letter-spacing: .08em;
+    color: var(--gray-500); text-transform: uppercase;
+    margin-bottom: 16px; padding-bottom: 8px;
+    border-bottom: 1px solid var(--gray-300);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title span { background: var(--gray-200); border-radius: var(--r-pill); padding: 1px 8px; font-size: 10px; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-start; }
+  .col2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .col3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .label { font-size: 11px; color: var(--gray-500); margin-top: 6px; text-align: center; }
+  .sublabel { font-size: 10px; color: var(--gray-500); opacity: .7; text-align: center; }
+  .card { background: #fff; border-radius: var(--r-lg); padding: 20px; box-shadow: var(--shadow-card); }
+  code { font-family: 'SF Mono', 'Consolas', monospace; font-size: 11px; background: var(--gray-100); padding: 2px 6px; border-radius: 4px; color: var(--gray-700); }
+  .new-badge { background: var(--blue); color: #fff; border-radius: var(--r-pill); padding: 2px 8px; font-size: 9px; font-weight: 700; }
+
+  /* ── COLORES ── */
+  .swatch-wrap { text-align: center; }
+  .swatch { width: 52px; height: 52px; border-radius: var(--r-md); border: 1px solid rgba(0,0,0,.08); }
+  .swatch-name { font-size: 9px; color: var(--gray-500); margin-top: 4px; }
+  .swatch-hex  { font-size: 8px; color: var(--gray-700); font-family: monospace; }
+
+  /* ── TIPOGRAFÍA ── */
+  .type-row { padding: 12px 0; border-bottom: 1px solid var(--gray-200); display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+  .type-meta { font-size: 10px; color: var(--gray-500); font-family: monospace; min-width: 220px; }
+  .type-tag { font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: var(--r-pill); }
+  .t-display { background: #EBF2FF; color: #3483FA; }
+  .t-body    { background: #E6F4EE; color: #00A650; }
+  .t-meta2   { background: #FFF9E6; color: #BA7517; }
+  .type-change { font-size: 10px; color: #F23D4F; font-family: monospace; }
+
+  /* ── BOTONES ── */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: none; cursor: pointer; font-family: var(--font); font-weight: 700; border-radius: var(--r-md); transition: filter .15s; text-decoration: none; }
+  .btn:hover { filter: brightness(.93); }
+  .btn-primary  { background: var(--blue); color: #fff; padding: 11px 20px; font-size: var(--body-md); }
+  .btn-outline   { background: transparent; color: var(--blue); border: 1.5px solid var(--blue); padding: 10px 18px; font-size: var(--body-md); }
+  .btn-yellow   { background: var(--yellow); color: #000; padding: 11px 20px; font-size: var(--body-md); }
+  .btn-ghost    { background: transparent; color: var(--gray-700); border: 1.5px solid var(--gray-300); padding: 10px 18px; font-size: var(--body-md); }
+  .btn-full     { display: flex; width: 100%; }
+  .btn-disabled { background: var(--gray-200); color: var(--gray-500); padding: 11px 20px; font-size: var(--body-md); cursor: not-allowed; border-radius: var(--r-md); text-align: center; font-weight: 700; }
+
+  /* ── INPUTS ── */
+  .input { width: 100%; background: var(--gray-100); border: 1px solid var(--gray-300); border-radius: var(--r-md); padding: 11px 14px; font-size: var(--body-md); font-family: var(--font); color: var(--black); outline: none; transition: border-color .15s; }
+  .input:focus { border-color: var(--blue); background: #fff; }
+  .search-wrap { position: relative; }
+  .search-wrap svg { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: #aaa; pointer-events: none; }
+  .input-search { background: var(--gray-100); border-radius: var(--r-pill); border: 1px solid var(--gray-200); padding: 10px 14px 10px 38px; font-size: var(--body-md); font-family: var(--font); color: #888; width: 100%; outline: none; }
+  .input-search:focus { border-color: var(--blue); background: #fff; }
+
+  /* ── BADGES ── */
+  .badge { display: inline-flex; align-items: center; gap: 4px; border-radius: var(--r-pill); font-size: var(--label); font-weight: 700; padding: 4px 10px; }
+  .badge-blue   { background: var(--blue-light); color: var(--blue); }
+  .badge-red    { background: #FDECEA; color: var(--red); }
+  .badge-green  { background: #E6F4EE; color: var(--green); }
+  .badge-yellow { background: #FFF9E6; color: #BA7517; }
+  .badge-new    { background: var(--red); color: #fff; }
+  .badge-gratis { background: var(--green); color: #fff; }
+  .chip-sel { background: var(--blue-light); color: var(--blue); border-radius: var(--r-pill); padding: 5px 10px; font-size: var(--body-sm); font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
+
+  /* ── PILL FILTERS — NUEVO ── */
+  .pill-filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; -ms-overflow-style: none; scrollbar-width: none; }
+  .pill-filters::-webkit-scrollbar { display: none; }
+  .pill-filter { border: 1.5px solid var(--gray-300); border-radius: var(--r-pill); padding: 6px 14px; font-size: var(--body-sm); color: var(--gray-700); white-space: nowrap; font-family: var(--font); background: #fff; cursor: pointer; transition: all .15s; font-weight: 500; flex-shrink: 0; min-height: var(--touch); display: inline-flex; align-items: center; }
+  .pill-filter-on { border-color: var(--blue); color: var(--blue); background: #fff; font-weight: 600; }
+  .pill-filter:hover:not(.pill-filter-on) { border-color: var(--gray-500); }
+
+  /* ── AVATARES ── */
+  .avatar { border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+  .av-lg { width: 40px; height: 40px; font-size: 15px; }
+  .av-md { width: 28px; height: 28px; font-size: 11px; }
+  .av-sm { width: 20px; height: 20px; font-size: 8px; }
+  .av-stack { display: flex; }
+  .av-stack .avatar { border: 2px solid #fff; margin-left: -6px; }
+  .av-stack .avatar:first-child { margin-left: 0; }
+
+  /* ── ESTRELLAS ── */
+  .stars { display: flex; gap: 2px; }
+  .star-on  { color: var(--yellow); font-size: 18px; }
+  .star-off { color: var(--gray-300); font-size: 18px; }
+
+  /* ── CHECK CIRCLES ── */
+  .chk { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--gray-300); flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; }
+  .chk-on { background: var(--blue); border-color: var(--blue); }
+
+  /* ── TOAST ── */
+  .toast { background: #222; color: #fff; border-radius: var(--r-lg); padding: 14px 18px; display: flex; align-items: center; gap: 12px; font-size: var(--body-sm); box-shadow: 0 4px 16px rgba(0,0,0,.2); }
+
+  /* ── NAV TABS ── */
+  .nav-tabs { display: flex; border-bottom: 1px solid var(--gray-200); overflow-x: auto; -ms-overflow-style: none; scrollbar-width: none; }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab { padding: 9px 14px; font-size: var(--body-sm); color: var(--gray-500); white-space: nowrap; font-weight: 500; cursor: pointer; }
+  .nav-tab-on { color: var(--blue); font-weight: 700; border-bottom: 2.5px solid var(--blue); }
+
+  /* ── TOP NAV ── */
+  .top-nav { background: var(--yellow); padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; }
+  .top-nav-title { font-size: var(--title-sm); font-weight: 700; color: #000; }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav { background: #fff; border-top: 1px solid var(--gray-200); display: flex; justify-content: space-around; padding: 8px 0 14px; }
+  .bn { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: var(--micro); color: var(--gray-500); min-width: 52px; min-height: var(--touch); justify-content: center; }
+  .bn-on { color: var(--blue); }
+  .bn svg { width: 22px; height: 22px; }
+
+  /* ── CONTACT ROW ── */
+  .contact-row { display: flex; align-items: center; gap: var(--sp-2); padding: var(--sp-2) var(--sp-4); border-bottom: 0.5px solid var(--gray-200); min-height: var(--touch); }
+
+  /* ── REC CARD ── */
+  .rec-card { background: var(--blue-light); border-radius: var(--r-lg); padding: 10px; border: 1px solid var(--blue-border); }
+  .warn-card { background: var(--warn-bg); border-radius: var(--r-lg); padding: 10px; border: 1.5px solid var(--yellow); }
+  .msg-bubble { background: var(--warn-bg); border-left: 2.5px solid var(--yellow); padding: 4px 8px; font-size: var(--body-sm); color: #555; font-style: italic; }
+  .widget-social { background: var(--blue-light); border-radius: var(--r-lg); padding: 10px 14px; border: 1px solid var(--blue-border); display: flex; align-items: center; gap: 10px; }
+
+  /* ── HERO BANNER — NUEVO ── */
+  .hero-banner { border-radius: var(--r-lg); overflow: hidden; position: relative; background: #111; }
+  .hero-banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,.15) 0%, rgba(0,0,0,.55) 100%); }
+  .hero-close { position: absolute; top: 10px; right: 10px; width: 28px; height: 28px; background: rgba(0,0,0,.55); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 2; }
+  .hero-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 14px; z-index: 2; }
+
+  /* ── TOP 10 CARD ── */
+  .top10-poster { border-radius: var(--r-md); overflow: hidden; position: relative; }
+  .top10-num { position: absolute; bottom: -6px; left: -3px; font-size: 72px; font-weight: 900; line-height: 1; color: #fff; -webkit-text-stroke: 3px #000; paint-order: stroke fill; z-index: 2; letter-spacing: -3px; user-select: none; }
+
+  /* ── PODRÍA GUSTARTE CARD — NUEVO ── */
+  .suggest-card { border-radius: var(--r-md); overflow: hidden; position: relative; background: #1a1a2e; flex-shrink: 0; }
+  .suggest-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .suggest-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.75) 100%); }
+  .suggest-title { position: absolute; bottom: 0; left: 0; right: 0; padding: 8px 10px; font-size: var(--body-sm); font-weight: 700; color: #fff; line-height: 1.2; z-index: 2; }
+  .suggest-row { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; -ms-overflow-style: none; scrollbar-width: none; }
+  .suggest-row::-webkit-scrollbar { display: none; }
+
+  /* ── SPACING VIZ ── */
+  .sp-row { display: flex; align-items: center; gap: 12px; padding: 5px 0; }
+  .sp-bar { background: #3483FA; border-radius: 2px; height: 20px; flex-shrink: 0; opacity: .65; }
+  .sp-token { font-size: 11px; font-weight: 500; color: #000; font-family: monospace; min-width: 48px; }
+  .sp-px { font-size: 11px; color: var(--gray-500); min-width: 34px; font-family: monospace; }
+  .sp-use { font-size: 11px; color: var(--gray-700); }
+  .sp-tag2 { font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: var(--r-pill); }
+  .tag-layout { background: #EBF2FF; color: #3483FA; }
+  .tag-comp { background: #E6F4EE; color: #00A650; }
+  .tag-typo { background: #FFF9E6; color: #BA7517; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="ds-header">
+    <div>
+      <h1>Meli Play — Design System</h1>
+      <p>Tokens, componentes y patrones · Escala tipográfica corregida para mobile</p>
+    </div>
+    <span class="ds-version">v2.0</span>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       1. COLORES
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Colores <span>tokens</span></div>
+    <div class="card">
+      <div style="margin-bottom:20px;">
+        <div style="font-size:11px;font-weight:700;color:var(--gray-500);margin-bottom:10px;">PRINCIPALES</div>
+        <div class="row">
+          <div class="swatch-wrap"><div class="swatch" style="background:#FFE600;"></div><div class="swatch-name">Yellow</div><div class="swatch-hex">#FFE600</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#3483FA;"></div><div class="swatch-name">Blue</div><div class="swatch-hex">#3483FA</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#EBF2FF;border:1px solid #CCE0FF;"></div><div class="swatch-name">Blue Light</div><div class="swatch-hex">#EBF2FF</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#CCE0FF;"></div><div class="swatch-name">Blue Border</div><div class="swatch-hex">#CCE0FF</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#F23D4F;"></div><div class="swatch-name">Red</div><div class="swatch-hex">#F23D4F</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#00A650;"></div><div class="swatch-name">Green</div><div class="swatch-hex">#00A650</div></div>
+        </div>
+      </div>
+      <div style="margin-bottom:20px;">
+        <div style="font-size:11px;font-weight:700;color:var(--gray-500);margin-bottom:10px;">NEUTROS</div>
+        <div class="row">
+          <div class="swatch-wrap"><div class="swatch" style="background:#000;"></div><div class="swatch-name">Black</div><div class="swatch-hex">#000000</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#555;"></div><div class="swatch-name">Gray 700</div><div class="swatch-hex">#555555</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#999;"></div><div class="swatch-name">Gray 500</div><div class="swatch-hex">#999999</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#E0E0E0;"></div><div class="swatch-name">Gray 300</div><div class="swatch-hex">#E0E0E0</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#EEEEEE;"></div><div class="swatch-name">Gray 200</div><div class="swatch-hex">#EEEEEE</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#F5F5F5;border:1px solid #ddd;"></div><div class="swatch-name">Gray 100</div><div class="swatch-hex">#F5F5F5</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#fff;border:1px solid #ddd;"></div><div class="swatch-name">White</div><div class="swatch-hex">#FFFFFF</div></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--gray-500);margin-bottom:10px;">AVATARES DE CONTACTOS</div>
+        <div class="row">
+          <div class="swatch-wrap"><div class="swatch" style="background:#7F77DD;"></div><div class="swatch-name">Social M</div><div class="swatch-hex">#7F77DD</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#1D9E75;"></div><div class="swatch-name">Social R</div><div class="swatch-hex">#1D9E75</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#BA7517;"></div><div class="swatch-name">Social L</div><div class="swatch-hex">#BA7517</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#534AB7;"></div><div class="swatch-name">Social V</div><div class="swatch-hex">#534AB7</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#C04828;"></div><div class="swatch-name">Social C</div><div class="swatch-hex">#C04828</div></div>
+          <div class="swatch-wrap"><div class="swatch" style="background:#1a1a2e;"></div><div class="swatch-name">Overlay Dark</div><div class="swatch-hex">#1a1a2e</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       2. TIPOGRAFÍA — CORREGIDA
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Tipografía <span>escala mobile corregida</span></div>
+    <div class="card">
+      <div class="type-row" style="padding-bottom:8px;">
+        <div class="type-meta" style="font-weight:700;">Token / Size / Weight / Line-height</div>
+        <div style="flex:1;font-size:11px;font-weight:700;color:var(--gray-500);">Ejemplo</div>
+        <div style="font-size:11px;font-weight:700;color:var(--gray-500);min-width:60px;text-align:right;">Uso</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">title-xl · 24px · 800 · 1.2<br><code>var(--title-xl)</code></div>
+        <div style="font-size:24px;font-weight:800;flex:1;line-height:1.2;">Mercado Play</div>
+        <span class="type-tag t-display">display</span>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">title-lg · 20px · 800 · 1.2<br><code>var(--title-lg)</code></div>
+        <div style="font-size:20px;font-weight:800;flex:1;line-height:1.2;">TOP 10 PELÍCULAS</div>
+        <span class="type-tag t-display">display</span>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">title-md · 17px · 700 · 1.3<br><code>var(--title-md)</code></div>
+        <div style="font-size:17px;font-weight:700;flex:1;line-height:1.3;">Los Fockers: La familia de mi esposo</div>
+        <span class="type-tag t-display">display</span>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">title-sm · 15px · 700 · 1.3<br><code>var(--title-sm)</code></div>
+        <div style="font-size:15px;font-weight:700;flex:1;">Mercado Play · Top nav</div>
+        <span class="type-tag t-display">display</span>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">body-lg · 15px · 600 · 1.4<br><code>var(--body-lg)</code></div>
+        <div style="font-size:15px;font-weight:600;flex:1;">Recomendar a un contacto</div>
+        <span class="type-tag t-body">body</span>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">body-md · 14px · 400 · 1.5<br><code>var(--body-md)</code></div>
+        <div style="font-size:14px;flex:1;line-height:1.5;">Un hombre teme lo peor cuando acompaña a los padres de su prometida a conocer a los suyos.</div>
+        <span class="type-tag t-body">body</span>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">body-sm · 13px · 400 · 1.4<br><code>var(--body-sm)</code></div>
+        <div style="font-size:13px;color:#555;flex:1;">Amiga · En Meli Play · hace 5 minutos</div>
+        <span class="type-tag t-body">body</span>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">label · 12px · 700 · 1.3<br><code>var(--label)</code></div>
+        <div style="font-size:12px;font-weight:700;letter-spacing:.05em;flex:1;">DE TU AGENDA · PARA MÍ · HOY</div>
+        <span class="type-tag t-meta2">meta</span>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">caption · 12px · 400 · 1.4<br><code>var(--caption)</code></div>
+        <div style="font-size:12px;color:#888;flex:1;">+14 · Comedia · 1h 55min · 2004</div>
+        <span class="type-tag t-meta2">meta</span>
+      </div>
+      <div class="type-row" style="border:none;">
+        <div class="type-meta">micro · 11px · 500 · 1.3<br><code>var(--micro)</code></div>
+        <div style="font-size:11px;color:#999;flex:1;font-weight:500;">Bottom nav label · Mínimo absoluto</div>
+        <span class="type-tag t-meta2">meta</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       3. ESPACIADO
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Espaciado <span>base 8px</span></div>
+    <div class="col2">
+      <div class="card">
+        <div style="font-size:11px;font-weight:700;color:var(--gray-500);margin-bottom:12px;">TOKENS</div>
+        <div class="sp-row"><div class="sp-bar" style="width:2px;"></div><span class="sp-token">sp-0</span><span class="sp-px">2px</span><span class="sp-use">micro-ajuste</span><span class="sp-tag2 tag-typo">tipo</span></div>
+        <div class="sp-row"><div class="sp-bar" style="width:4px;"></div><span class="sp-token">sp-1</span><span class="sp-px">4px</span><span class="sp-use">título → subtítulo, ícono → texto</span><span class="sp-tag2 tag-typo">tipo</span></div>
+        <div class="sp-row"><div class="sp-bar" style="width:8px;"></div><span class="sp-token">sp-2</span><span class="sp-px">8px</span><span class="sp-use">gap dentro de componente</span><span class="sp-tag2 tag-comp">comp</span></div>
+        <div class="sp-row"><div class="sp-bar" style="width:12px;"></div><span class="sp-token">sp-3</span><span class="sp-px">12px</span><span class="sp-use">padding interno de cards pequeñas</span><span class="sp-tag2 tag-comp">comp</span></div>
+        <div class="sp-row"><div class="sp-bar" style="width:16px;"></div><span class="sp-token">sp-4</span><span class="sp-px">16px</span><span class="sp-use">margin lateral, gutter, padding card</span><span class="sp-tag2 tag-layout">layout</span></div>
+        <div class="sp-row"><div class="sp-bar" style="width:24px;"></div><span class="sp-token">sp-5</span><span class="sp-px">24px</span><span class="sp-use">entre secciones de pantalla</span><span class="sp-tag2 tag-layout">layout</span></div>
+        <div class="sp-row"><div class="sp-bar" style="width:32px;"></div><span class="sp-token">sp-6</span><span class="sp-px">32px</span><span class="sp-use">separación entre bloques mayores</span><span class="sp-tag2 tag-layout">layout</span></div>
+        <div class="sp-row"><div class="sp-bar" style="width:48px;"></div><span class="sp-token">sp-7</span><span class="sp-px">48px</span><span class="sp-use">altura bottom/top nav</span><span class="sp-tag2 tag-layout">layout</span></div>
+        <div class="sp-row" style="margin-top:4px;padding-top:8px;border-top:1px solid var(--gray-200);">
+          <div class="sp-bar" style="width:44px;background:#F23D4F;opacity:1;"></div>
+          <span class="sp-token" style="color:#F23D4F;">touch</span>
+          <span class="sp-px" style="color:#F23D4F;">44px</span>
+          <span class="sp-use" style="color:#F23D4F;">mínimo tap target — siempre</span>
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-size:11px;font-weight:700;color:var(--gray-500);margin-bottom:12px;">CUÁNDO USAR 4PX VS 8PX EN TEXTO</div>
+        <div style="margin-bottom:16px;">
+          <div style="font-size:12px;font-weight:600;color:#00A650;margin-bottom:8px;">✓ 4px — pares tipográficos (una unidad)</div>
+          <div style="background:#f5f5f5;border-radius:8px;padding:12px 14px;">
+            <div style="font-size:17px;font-weight:700;line-height:1;">Los Fockers</div>
+            <div style="height:4px;"></div>
+            <div style="font-size:12px;color:#888;">Comedia · 1h 55min · 2004</div>
+            <div style="height:8px;"></div>
+            <div style="font-size:14px;color:#555;line-height:1.4;">Un hombre teme lo peor cuando acompaña a los padres...</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:#F23D4F;margin-bottom:8px;">✕ 8px entre pares — se ven separados</div>
+          <div style="background:#f5f5f5;border-radius:8px;padding:12px 14px;opacity:.6;">
+            <div style="font-size:17px;font-weight:700;line-height:1;">Los Fockers</div>
+            <div style="height:8px;"></div>
+            <div style="font-size:12px;color:#888;">Comedia · 1h 55min · 2004</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       4. BOTONES
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Botones <span>5 variantes</span></div>
+    <div class="card">
+      <div class="row" style="margin-bottom:20px;align-items:flex-end;">
+        <div><button class="btn btn-primary">Ver gratis</button><div class="label">Primary</div></div>
+        <div><button class="btn btn-outline">Guardar</button><div class="label">Outline</div></div>
+        <div><button class="btn btn-yellow">Permitir acceso</button><div class="label">Yellow</div></div>
+        <div><button class="btn btn-ghost">No gracias</button><div class="label">Ghost</div></div>
+        <div><div class="btn-disabled">Seleccioná uno</div><div class="label">Disabled</div></div>
+      </div>
+      <div class="row" style="align-items:flex-end;">
+        <div style="width:240px;"><button class="btn btn-primary btn-full" style="font-size:14px;">Enviar a 2 contactos</button><div class="label">Full width</div></div>
+        <div style="width:180px;"><button class="btn btn-primary btn-full" style="background:#1a1a2e;font-size:14px;">▶ MIRAR EN TV</button><div class="label">Dark variant</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       5. INPUTS
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Inputs <span>2 variantes</span></div>
+    <div class="col2">
+      <div class="card">
+        <div class="search-wrap" style="margin-bottom:6px;">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg>
+          <input class="input-search" placeholder="Buscar en agenda..." />
+        </div>
+        <div class="label">Search pill — home y selección</div>
+      </div>
+      <div class="card">
+        <input class="input" placeholder="¡Mirá esto, te va a encantar!" style="margin-bottom:6px;"/>
+        <div class="label">Text input — mensaje opcional</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       6. PILL FILTERS — NUEVO
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Pill filters <span>nuevo</span></div>
+    <div class="card">
+      <div style="margin-bottom:16px;">
+        <div style="font-size:11px;color:var(--gray-500);margin-bottom:10px;font-weight:600;">FILTROS DE GÉNERO (pantalla Películas)</div>
+        <div class="pill-filters">
+          <button class="pill-filter pill-filter-on">Todos</button>
+          <button class="pill-filter">Destacados</button>
+          <button class="pill-filter">Comedia</button>
+          <button class="pill-filter">Acción</button>
+          <button class="pill-filter">Ciencia Ficción</button>
+          <button class="pill-filter">Drama</button>
+          <button class="pill-filter">Infantil</button>
+        </div>
+      </div>
+      <div style="margin-bottom:16px;">
+        <div style="font-size:11px;color:var(--gray-500);margin-bottom:10px;font-weight:600;">FILTROS DE CONTACTO (pantalla Para mí)</div>
+        <div class="pill-filters">
+          <button class="pill-filter pill-filter-on">Todas</button>
+          <button class="pill-filter" style="display:inline-flex;align-items:center;gap:6px;">
+            <span style="width:18px;height:18px;border-radius:50%;background:#1D9E75;color:#fff;font-size:8px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">R</span>Roberto
+          </button>
+          <button class="pill-filter" style="display:inline-flex;align-items:center;gap:6px;">
+            <span style="width:18px;height:18px;border-radius:50%;background:#7F77DD;color:#fff;font-size:8px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">M</span>Martina
+          </button>
+        </div>
+      </div>
+      <div style="background:var(--gray-100);border-radius:8px;padding:12px 14px;">
+        <div style="font-size:11px;font-weight:700;color:var(--gray-700);margin-bottom:6px;">Especificaciones</div>
+        <div style="font-size:12px;color:var(--gray-700);line-height:1.7;">
+          • Activo: <code>border: 1.5px solid #3483FA · color: #3483FA · font-weight: 600</code><br>
+          • Inactivo: <code>border: 1.5px solid #E0E0E0 · color: #555</code><br>
+          • Altura mínima: <code>44px</code> (touch target)<br>
+          • Padding: <code>6px 14px</code><br>
+          • Font-size: <code>13px (body-sm)</code><br>
+          • Scroll horizontal, sin scrollbar visible
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       7. BADGES Y CHIPS
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Badges y chips</div>
+    <div class="card">
+      <div class="row" style="margin-bottom:16px;">
+        <div><span class="badge badge-blue">En Meli Play</span><div class="label">Blue</div></div>
+        <div><span class="badge badge-green">● En Meli Play</span><div class="label">Green</div></div>
+        <div><span class="badge badge-red">● Sin cuenta</span><div class="label">Red</div></div>
+        <div><span class="badge badge-yellow">$ 15% OFF</span><div class="label">Yellow</div></div>
+        <div><span class="badge badge-new">NUEVA</span><div class="label">New</div></div>
+        <div><span class="badge badge-gratis">GRATIS</span><div class="label">Gratis</div></div>
+      </div>
+      <div style="border-top:1px solid var(--gray-200);padding-top:14px;margin-top:2px;">
+        <div style="font-size:11px;color:var(--gray-500);margin-bottom:10px;font-weight:600;">CHIPS DE SELECCIÓN</div>
+        <div class="row">
+          <span class="chip-sel"><span style="width:16px;height:16px;border-radius:50%;background:#7F77DD;color:#fff;font-size:7px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;">M</span>Martina <span style="opacity:.5;font-size:12px;">✕</span></span>
+          <span class="chip-sel"><span style="width:16px;height:16px;border-radius:50%;background:#1D9E75;color:#fff;font-size:7px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;">R</span>Roberto <span style="opacity:.5;font-size:12px;">✕</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       8. AVATARES Y ESTRELLAS
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Avatares y puntuación</div>
+    <div class="col2">
+      <div class="card">
+        <div class="row" style="align-items:flex-end;margin-bottom:16px;">
+          <div style="text-align:center;"><div class="avatar av-lg" style="background:#7F77DD;color:#fff;">M</div><div class="label">LG · 40px</div></div>
+          <div style="text-align:center;"><div class="avatar av-md" style="background:#1D9E75;color:#fff;">R</div><div class="label">MD · 28px</div></div>
+          <div style="text-align:center;"><div class="avatar av-sm" style="background:#BA7517;color:#fff;">L</div><div class="label">SM · 20px</div></div>
+          <div style="text-align:center;">
+            <div class="av-stack">
+              <div class="avatar av-md" style="background:#7F77DD;color:#fff;">M</div>
+              <div class="avatar av-md" style="background:#1D9E75;color:#fff;">R</div>
+              <div class="avatar av-md" style="background:#BA7517;color:#fff;">L</div>
+            </div>
+            <div class="label">Stack</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="row" style="align-items:center;">
+          <div style="text-align:center;"><div class="stars"><span class="star-on">★</span><span class="star-on">★</span><span class="star-on">★</span><span class="star-on">★</span><span class="star-off">★</span></div><div class="label">4/5 · puntuada</div></div>
+          <div style="text-align:center;"><div class="stars"><span class="star-off">★</span><span class="star-off">★</span><span class="star-off">★</span><span class="star-off">★</span><span class="star-off">★</span></div><div class="label">Sin puntuar</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       9. HERO / BANNER — NUEVO
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Hero banner <span>nuevo</span></div>
+    <div class="card">
+      <div class="col2">
+        <div>
+          <div style="font-size:11px;color:var(--gray-500);margin-bottom:10px;font-weight:600;">HERO — HOME (con título y badge)</div>
+          <div class="hero-banner" style="height:160px;">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:center;"></div>
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+              <div style="font-size:22px;font-weight:900;color:#fff;line-height:1.1;text-shadow:0 1px 4px rgba(0,0,0,.4);">Oppenheimer</div>
+              <div style="margin-top:6px;display:inline-flex;align-items:center;gap:6px;">
+                <span style="background:var(--yellow);color:#000;border-radius:4px;padding:3px 8px;font-size:12px;font-weight:700;">💲 Disfrutala con 15% OFF</span>
+              </div>
+            </div>
+          </div>
+          <div class="label" style="margin-top:6px;">Home hero · altura variable</div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--gray-500);margin-bottom:10px;font-weight:600;">HERO — FICHA (con botón X, como en la app)</div>
+          <div class="hero-banner" style="height:160px;">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#2a1a0e,#1a1a2e);display:flex;align-items:center;justify-content:center;">
+              <div style="text-align:center;color:rgba(255,255,255,.15);font-size:13px;font-style:italic;">imagen de película</div>
+            </div>
+            <div class="hero-overlay"></div>
+            <div class="hero-close">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/></svg>
+            </div>
+            <div class="hero-content">
+              <div style="font-size:20px;font-weight:800;color:#fff;line-height:1.1;">Los Fockers</div>
+              <div style="font-size:13px;color:rgba(255,255,255,.7);margin-top:4px;">+14 · Comedia · 1h 55min · 2004</div>
+            </div>
+          </div>
+          <div class="label" style="margin-top:6px;">Ficha hero · con X de cierre</div>
+        </div>
+      </div>
+      <div style="background:var(--gray-100);border-radius:8px;padding:12px 14px;margin-top:16px;">
+        <div style="font-size:12px;color:var(--gray-700);line-height:1.7;">
+          • Overlay: <code>linear-gradient(to bottom, rgba(0,0,0,.15) 0%, rgba(0,0,0,.55) 100%)</code><br>
+          • Título: <code>font-size: 22px / weight 900 / color #fff / text-shadow: 0 1px 4px rgba(0,0,0,.4)</code><br>
+          • Botón X: <code>28×28px / background rgba(0,0,0,.55) / border-radius 50% / posición: top 10px right 10px</code><br>
+          • Badge OFF: <code>background #FFE600 / color #000 / border-radius 4px / padding 3px 8px</code>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       10. TOP 10 CARDS
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">TOP 10 cards</div>
+    <div class="card">
+      <div class="row" style="align-items:flex-end;margin-bottom:16px;">
+        <div style="text-align:center;">
+          <div style="position:relative;display:inline-block;">
+            <div class="top10-poster" style="width:96px;height:136px;background:linear-gradient(135deg,#1e3a5f,#2e6da4);"></div>
+            <div class="top10-num" style="font-size:60px;-webkit-text-stroke:2.5px #000;">1</div>
+          </div>
+          <div class="label">96×136px · SM</div>
+          <div class="sublabel">nro 60px</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="position:relative;display:inline-block;">
+            <div class="top10-poster" style="width:128px;height:180px;background:linear-gradient(135deg,#1e3a5f,#2e6da4);box-shadow:0 0 0 2.5px #3483FA,2px 2px 8px rgba(0,0,0,.3);"></div>
+            <div class="top10-num" style="font-size:80px;">1</div>
+          </div>
+          <div class="label" style="color:#3483FA;font-weight:700;">128×180px · MD ← recomendado</div>
+          <div class="sublabel">nro 80px / stroke 3px</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="position:relative;display:inline-block;">
+            <div class="top10-poster" style="width:160px;height:224px;background:linear-gradient(135deg,#1e3a5f,#2e6da4);"></div>
+            <div class="top10-num" style="font-size:96px;-webkit-text-stroke:3.5px #000;">1</div>
+          </div>
+          <div class="label">160×224px · LG</div>
+          <div class="sublabel">nro 96px</div>
+        </div>
+      </div>
+      <div style="background:var(--gray-100);border-radius:8px;padding:12px 14px;">
+        <div style="font-size:12px;color:var(--gray-700);line-height:1.7;">
+          • Número: <code>font-size: 80px / weight: 900 / color: #fff / -webkit-text-stroke: 3px #000 / paint-order: stroke fill</code><br>
+          • Posición número: <code>bottom: -6px / left: -3px</code> (se sale del card — igual a la app real)<br>
+          • Radio: <code>border-radius: 8px</code> · Sombra: <code>box-shadow: 2px 2px 8px rgba(0,0,0,.25)</code><br>
+          • Overlap entre cards en scroll: <code>margin-right: -20px</code>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       11. PODRÍAN GUSTARTE — NUEVO
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Cards "Podrían gustarte" <span>nuevo</span></div>
+    <div class="card">
+      <div style="font-size:11px;color:var(--gray-500);margin-bottom:10px;font-weight:600;">SCROLL HORIZONTAL — 4 cards visibles aprox</div>
+      <div style="background:var(--gray-100);border-radius:10px;padding:14px;">
+        <div style="font-size:17px;font-weight:800;color:#000;margin-bottom:10px;">Podrían gustarte</div>
+        <div class="suggest-row">
+          <div class="suggest-card" style="width:112px;height:158px;">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#0d1b2a,#1b4f72);display:flex;align-items:center;justify-content:center;"></div>
+            <div class="suggest-overlay"></div>
+            <div class="suggest-title">Día de la Independencia</div>
+          </div>
+          <div class="suggest-card" style="width:112px;height:158px;">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#2a1a0e,#6e3d1a);"></div>
+            <div class="suggest-overlay"></div>
+            <div class="suggest-title">Los Fockers</div>
+          </div>
+          <div class="suggest-card" style="width:112px;height:158px;">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#2a0a1a,#9b2a5a);"></div>
+            <div class="suggest-overlay"></div>
+            <div class="suggest-title">Chicas Pesadas</div>
+          </div>
+          <div class="suggest-card" style="width:112px;height:158px;">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#1a2a0a,#4a6a1a);"></div>
+            <div class="suggest-overlay"></div>
+            <div class="suggest-title">Las invasoras</div>
+          </div>
+          <div class="suggest-card" style="width:112px;height:158px;opacity:.7;">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#0a1a2a,#1a4a6a);"></div>
+            <div class="suggest-overlay"></div>
+            <div class="suggest-title">Película 5</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--gray-100);border-radius:8px;padding:12px 14px;margin-top:16px;">
+        <div style="font-size:12px;color:var(--gray-700);line-height:1.7;">
+          • Card size: <code>112×158px</code> → ratio 16:9 vertical aprox · 4 cards visibles en 390px<br>
+          • Overlay: <code>linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.75) 100%)</code><br>
+          • Título: <code>font-size: 13px / weight: 700 / color: #fff / padding: 8px 10px / posición: bottom</code><br>
+          • Sección title: <code>font-size: 17px / weight: 800</code> (title-md)<br>
+          • Gap entre cards: <code>10px</code> · Scroll horizontal sin scrollbar
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       12. TARJETAS DE FLUJO
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Tarjetas de flujo</div>
+    <div class="col2">
+      <div>
+        <div style="font-size:11px;color:var(--gray-500);margin-bottom:10px;font-weight:600;">RECOMENDACIÓN RECIBIDA</div>
+        <div class="rec-card">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <div class="avatar av-sm" style="background:#1D9E75;color:#fff;width:22px;height:22px;font-size:9px;">R</div>
+            <div style="font-size:13px;font-weight:700;color:#000;flex:1;">Roberto te recomendó</div>
+            <div style="font-size:11px;color:#aaa;">ahora</div>
+          </div>
+          <div style="display:flex;gap:8px;background:#fff;border-radius:8px;padding:8px;border:1px solid var(--blue-border);margin-bottom:8px;">
+            <div style="width:36px;height:50px;background:#1a1a2e;border-radius:5px;flex-shrink:0;"></div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:#000;line-height:1.2;">Los Fockers</div>
+              <div style="font-size:12px;color:#888;margin-top:4px;">Comedia · 1h 55min · 2004</div>
+              <div class="msg-bubble" style="margin-top:6px;">"¡Mirá esto, te va a encantar!"</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-primary" style="flex:2;font-size:13px;padding:9px 0;border-radius:7px;">▶ Ver gratis</button>
+            <button class="btn btn-outline" style="flex:1;font-size:13px;padding:9px 0;border-radius:7px;">Guardar</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--gray-500);margin-bottom:10px;font-weight:600;">PERMISO DE AGENDA</div>
+        <div class="warn-card">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <span style="font-size:20px;">📒</span>
+            <div style="font-size:14px;font-weight:700;color:#000;">Acceder a tu agenda</div>
+          </div>
+          <div style="font-size:13px;color:#666;line-height:1.5;margin-bottom:10px;">Para encontrar a tus contactos en Meli Play. Solo la usamos para sugerirte a quién enviar.</div>
+          <button class="btn btn-yellow btn-full" style="font-size:13px;padding:10px 0;border-radius:7px;margin-bottom:8px;">Permitir acceso a mi agenda</button>
+          <div style="text-align:center;font-size:13px;color:var(--blue);font-weight:600;">No gracias, usar red de Mercado</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:16px;">
+      <div style="font-size:11px;color:var(--gray-500);margin-bottom:10px;font-weight:600;">WIDGET SOCIAL — HOME</div>
+      <div class="widget-social" style="max-width:360px;">
+        <div class="av-stack">
+          <div class="avatar av-sm" style="background:#7F77DD;color:#fff;">M</div>
+          <div class="avatar av-sm" style="background:#1D9E75;color:#fff;">R</div>
+          <div class="avatar av-sm" style="background:#BA7517;color:#fff;">L</div>
+        </div>
+        <div style="flex:1;font-size:13px;color:var(--blue);font-weight:500;">3 contactos guardaron contenido</div>
+        <span style="color:var(--blue);font-size:16px;">›</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       13. CONTACT ROW
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Fila de contacto <span>3 estados</span></div>
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div class="contact-row">
+        <div class="avatar av-md" style="background:#7F77DD;color:#fff;">M</div>
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:600;color:#000;line-height:1.2;">Martina García</div>
+          <div style="font-size:12px;color:#888;margin-top:4px;">Amiga · En Meli Play</div>
+        </div>
+        <div class="chk"></div>
+      </div>
+      <div class="contact-row" style="background:#EBF2FF;">
+        <div class="avatar av-md" style="background:#1D9E75;color:#fff;">R</div>
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:600;color:#000;line-height:1.2;">Roberto (papá)</div>
+          <div style="font-size:12px;color:#3483FA;margin-top:4px;">● En Meli Play</div>
+        </div>
+        <div class="chk chk-on">
+          <svg width="11" height="11" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
+        </div>
+      </div>
+      <div class="contact-row" style="opacity:.6;border-bottom:none;">
+        <div class="avatar av-md" style="background:#eee;color:#aaa;">A</div>
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:600;color:#555;line-height:1.2;">Andrés Soria</div>
+          <div style="font-size:12px;color:#E2A000;margin-top:4px;">Sin cuenta · invitar</div>
+        </div>
+        <span style="font-size:16px;color:#ccc;">↗</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       14. NAVEGACIÓN
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Navegación</div>
+    <div class="col2">
+      <div class="card">
+        <div style="font-size:11px;font-weight:700;color:var(--gray-500);margin-bottom:10px;">TOP NAV</div>
+        <div class="top-nav" style="border-radius:8px;margin-bottom:12px;">
+          <svg width="20" height="20" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+          <span class="top-nav-title">Mercado Play</span>
+          <svg width="20" height="20" fill="none" stroke="#000" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        </div>
+        <div style="font-size:11px;font-weight:700;color:var(--gray-500);margin-bottom:6px;">CONTENT TABS</div>
+        <div class="nav-tabs" style="border-radius:4px 4px 0 0;">
+          <div class="nav-tab nav-tab-on">Para vos</div>
+          <div class="nav-tab">Películas</div>
+          <div class="nav-tab">Series</div>
+          <div class="nav-tab">Infantil</div>
+          <div class="nav-tab">Clips</div>
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-size:11px;font-weight:700;color:var(--gray-500);margin-bottom:10px;">BOTTOM NAV — 4 ÍTEMS</div>
+        <div class="bottom-nav" style="border:1px solid var(--gray-200);border-radius:12px;">
+          <div class="bn bn-on">
+            <svg fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+            <span>Inicio</span>
+          </div>
+          <div class="bn">
+            <svg fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg>
+            <span>Buscar</span>
+          </div>
+          <div class="bn" style="position:relative;">
+            <div style="position:relative;display:inline-block;">
+              <svg fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="width:22px;height:22px;"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+              <span style="position:absolute;top:-4px;right:-6px;background:var(--red);color:#fff;border-radius:8px;font-size:8px;font-weight:700;padding:1px 4px;">2</span>
+            </div>
+            <span>Notifs</span>
+          </div>
+          <div class="bn">
+            <svg fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            <span>Mi cuenta</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       15. TOAST
+  ══════════════════════════════════════════ -->
+  <div class="section" style="margin-bottom:0;">
+    <div class="section-title">Toast / Feedback</div>
+    <div class="card">
+      <div class="toast" style="max-width:380px;">
+        <svg width="18" height="18" fill="none" stroke="#00A650" stroke-width="2.5" stroke-linecap="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        <span style="font-size:14px;">¡Recomendación enviada a Roberto!</span>
+      </div>
+      <div class="label" style="text-align:left;margin-top:8px;">Toast · dark bg · ícono de estado · font-size 14px</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
